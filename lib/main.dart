@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+//import 'package:http/http.dart' as http;
+//import 'package:vaxallot/http.dart' ;
+import 'package:http/http.dart' as http;
+import 'package:vaxallot/inside.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
@@ -21,8 +26,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   TextEditingController pincodectrl = TextEditingController();
   TextEditingController dayctrl = TextEditingController();
+  String dropdownValue = '01';
+  List slots=[];
+  
+  fetchslots() async {
+    await http
+        .get(Uri.parse(
+            'https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=' +
+                pincodectrl.text +
+                '&date=' +
+                dayctrl.text +
+                '%2F' +
+                dropdownValue +
+                '%2F2021'))
+        .then((value) {
+      Map result = jsonDecode(value.body);
+      print(result);
+      setState(() {
+        slots = result['sessions'];
+      });
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Inside(
+                    slots: slots,
+                  )));
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,8 +96,66 @@ class _HomeState extends State<Home> {
                         hintText: 'Enter Date',
                       ),
                     ),
-                  ))
+                  )),
+                  SizedBox(width: 10,),
+                  Expanded(
+                      child: Container(
+                        height: 56,
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                    value: dropdownValue,
+                    icon: const Icon(Icons.date_range),
+                    iconSize: 24,
+                    elevation: 16,
+                    //style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                    ),
+                    onChanged: (String newValue) {
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
+                    },
+                    items: <String>[
+                        '01',
+                        '02',
+                        '03',
+                        '04',
+                        '05',
+                        '06',
+                        '07',
+                        '08',
+                        '09',
+                        '10',
+                        '11',
+                        '12'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                    }).toList(),
+                  ),
+                      ))
                 ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: double.infinity,
+                height: 45,
+                child:ElevatedButton(
+                  
+                  onPressed: (){
+                    fetchslots();
+                  },
+                  child: Text('Find Slots'),
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.teal),
+                   ),
+                  )
               )
             ],
           ),
