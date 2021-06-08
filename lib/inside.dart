@@ -27,7 +27,7 @@ class _InsideState extends State<Inside> {
             return Container(
               padding:EdgeInsets.all(10),
               margin:EdgeInsets.all(10),
-              color:Colors.grey.shade800,
+              color:Colors.red[50],
               height: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: Colors.teal,
+          brightness: Brightness.light,
+          primaryColor: Colors.red[400],
         ),
         home: Home());
   }
@@ -153,7 +153,7 @@ class _HomeState extends State<Home> {
                   },
                   child: Text('Find Slots'),
                   style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.teal),
+                      backgroundColor: MaterialStateProperty.all(Colors.red[400]),
                    ),
                   )
               )
