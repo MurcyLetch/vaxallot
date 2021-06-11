@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Vaccinations niches'),
+        title: Text('Vaccinations Niches'),
       ),
       body: SingleChildScrollView(
         child: Container(
